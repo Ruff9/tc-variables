@@ -1,0 +1,17 @@
+.main-title {
+	font-size: 1.5em;
+	text-transform: uppercase;
+	font-weight: bold;
+}
+
+/*.file-name {
+	text-align: left;
+}*/
+
+.file-list li {
+	list-style-type: none;
+}
+
+.base-header {
+	text-align: left;
+}

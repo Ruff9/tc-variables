@@ -1,0 +1,231 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>ENV variables at Tunecore</title>
+
+		<link rel="stylesheet" href="css/reset.css">
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/black.css">
+
+		<!-- Theme used for syntax highlighting of code -->
+		<link rel="stylesheet" href="lib/css/monokai.css">
+
+		<link rel="stylesheet" href="css/custom.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<section>
+					<header class='main-title'>Env variables</br>at Tunecore</header>
+				</section>
+
+				<section>
+					<code class='file-name'>SETUP.md</code>
+					<img src="./img/setup_transcrypt.png">
+				</section>
+
+				<section>
+						<div class='env-file-item'>					
+							<code class='file-name'>env.development.docker</code>
+							<pre><code data-trim>				
+								U2FsdGVkX1/AXl5lF6RJAFjkt4W9oKdqB
+								Vk04Ni/47fAUyI8CxVzwD1vFlFb2pKD+j
+								CTUWfkATxXQrgl4DB2ocHq3fDXX4mSjio
+								azOQ1dbZNg35A/aDnBOC42fvnq88rAgWI
+								qApUSKkz8glKubVpo48t17TqVmoj6rfGc
+							</code></pre>
+						</div>
+						&#x2B07;
+						<div class='env-file-item'>
+							<pre><code data-trim>				
+								RAILS_ENV=development
+								ACTION_MAILER_HOST=localhost
+								ACTION_MAILER_PORT=25
+								ACTION_MAILER_DOMAIN=tunecore.com
+								AIRBRAKE_PROJECT_ID=111111111
+							</code></pre>
+						</div>
+				</section>
+
+				<section>
+					<div class='base-header'>Files decrypted</div>
+					<ul class="file-list">
+						<li>.envrc</li>
+						<li>env.development.docker</li>
+						<li>env.development.local</li>
+						<li>env.test.docker</li>
+						<li>env.test.local</li>
+					</ul>
+				</section>
+
+				<section>
+					<code class='file-name'>.gitattributes</code>
+					<pre><code data-trim>				
+						#pattern  filter=crypt diff=crypt
+						env.*.*  filter=crypt diff=crypt
+						.envrc  filter=crypt diff=crypt
+					</code></pre>
+				</section>
+
+				<section>
+					<code class='file-name'>script/switch_to_local</code>
+					<pre><code data-trim>				
+						cp env.test.local .env.test
+						cp env.development.local .env.development
+					</code></pre></br>
+					<code class='file-name'>script/switch_to_docker</code>
+					<pre><code data-trim>				
+						cp env.test.docker .env.test
+						cp env.development.docker .env.development
+					</code></pre>
+				</section>
+
+				<section>
+					<code class='file-name'>Gemfile</code>
+					<pre><code data-trim>				
+						gem 'dotenv-rails', require: 'dotenv/rails-now'
+					</code></pre></br>
+					<code class='file-name'>.gitignore</code>
+					<pre><code data-trim>				
+						.env.*
+					</code></pre>
+				</section>
+
+				<section>
+					<div class='base-header'>Pending question</div>
+					<ul class="file-list">
+						<li>- How to add a new variable?</li>
+					</ul>
+				</section>
+
+				<section>
+					<pre><code data-trim>				
+						ENV["STORES_BY_BELIEVE"]
+					</code></pre>
+				</section>
+
+				<section>
+					<code class='file-name'>docker/pull_secrets.sh</code>
+					<pre><code data-trim>				
+						pull_secrets() {
+						  if [ "$1" == "development" ] || [ "$1" == "test" ]; then
+						    BUCKET=secrets-dev
+						  fi
+
+						  if [ "$1" == "staging" ] || [ "$1" == "production" ]; then
+						    BUCKET=secrets
+						  fi
+
+						  aws s3 cp s3://$BUCKET.tunecore.com/$1/tc-www/secrets.txt \
+						  					tmp/secrets.txt.$1
+						}
+
+						pull_secrets "development"
+						pull_secrets "test"
+						pull_secrets "staging"
+						pull_secrets "production"
+					</code></pre>
+				</section>
+
+				<section>
+					<div class='base-header'>Pending questions</div>
+					<ul class="file-list">
+						<li>- How could I miss this in my setup?</li>
+						<li>- Where is the rest of this process?</li>
+					</ul>
+				</section>
+
+				<section>
+					Two parallel systems?
+				</section>
+
+				<section>
+					<code class='file-name'>01/07/2019</code>
+					<img src="./img/slack_ian_01072019.png">
+				</section>
+
+				<section>
+					<code class='file-name'>01/07/2019</code>
+					<img src="./img/slack_ian_2.png">
+				</section>
+
+				<section>
+					<code class='file-name'>Removed on 02/07/2019</code>
+					<img src="./img/confluence_1.png">
+				</section>
+
+				<section>
+					<code class='file-name'>08/01/2019</code>
+					<img src="./img/dan_pr2.png">
+				</section>
+
+				<section>
+					<code class='file-name'>14/03/2019</code>
+					<img src="./img/vagmi_feature.png">
+				</section>
+
+				<section>
+					<table>
+						<tr>
+							<td>08/01/2019</td>
+							<td>Dan setup the new system</td>
+						</tr>
+						<tr>
+							<td>14/03/2019</td>
+							<td>Vagmi add a new variable in the old system</td>
+						</tr>
+						<tr>
+							<td>17/06/2019</td>
+							<td>Toktam merge Dan's new system</td>
+						</tr>
+						<tr>
+							<td>01/07/2019</td>
+							<td>Ian remove references to old system in docs</td>
+						</tr>
+						<tr>
+							<td>08/07/2019</td>
+							<td>Rémy starts onboarding</td>
+						</tr>
+					</table>
+				</section>
+
+				<section>
+					<div class='base-header'>Pending questions</div>
+					<ul class="file-list">
+						<li>- Are other variables lost in translation?</li>
+						<li>- How do we add a variable in the new system?</li>
+						<li>- Is the new system complete?</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="js/reveal.js"></script>
+
+		<script>
+			// More info about config & dependencies:
+			// - https://github.com/hakimel/reveal.js#configuration
+			// - https://github.com/hakimel/reveal.js#dependencies
+			Reveal.initialize({
+				dependencies: [
+					{ src: 'plugin/markdown/marked.js' },
+					{ src: 'plugin/markdown/markdown.js' },
+					{ src: 'plugin/notes/notes.js', async: true },
+					{ src: 'plugin/highlight/highlight.js', async: true }
+				]
+			});
+		</script>
+	</body>
+</html>
